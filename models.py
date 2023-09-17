@@ -6,14 +6,15 @@ class NoteModel(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(1024), unique = False, nullable = False)
     body = db.Column(db.String(8192), unique = False, nullable = True)
+    owner = db.Column(db.String(128), unique = False, nullable = False)
 
     @classmethod
-    def find_by_id(cls, id):
-        return cls.query.filter_by(id=id).first()
+    def find_by_id(cls, id, owner):
+        return cls.query.filter_by(id=id).filter_by(owner=owner).first()
 
     @classmethod
-    def find_all(cls):
-        return cls.query.all()
+    def find_by_owner(cls, owner):
+        return cls.query.filter_by(owner=owner).all()
 
     def insert_to_db(self):
         db.session.add(self)
