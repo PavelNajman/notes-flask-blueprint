@@ -19,7 +19,7 @@ class Note(MethodView):
             return note
         abort(404, message="Note not found.")
 
-    @jwt_required()
+    @jwt_required(fresh=True)
     @blp.arguments(NoteSchema)
     @blp.response(200, NoteSchema)
     def put(self, note_data, note_id):
@@ -35,7 +35,7 @@ class Note(MethodView):
             abort(500, message="An error occured while updating the note.")
         return note
         
-    @jwt_required()
+    @jwt_required(fresh=True)
     @blp.response(200, NoteSchema)
     def delete(self, note_id):
         note_owner = get_jwt_identity()
@@ -52,7 +52,7 @@ class NoteList(MethodView):
     def get(self):
         return NoteModel.find_by_owner(get_jwt_identity())
 
-    @jwt_required()
+    @jwt_required(fresh=True)
     @blp.arguments(NoteSchema)
     @blp.response(201, NoteSchema)
     def post(self, note_data):
